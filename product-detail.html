@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link rel="icon" type="image/x-icon" href="asset/favicon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="page-loader" id="pageLoader">
+        <div class="loader-content">
+            <div class="cake">
+                <div class="plate"></div>
+                <div class="layer layer-bottom"></div>
+                <div class="layer layer-middle"></div>
+                <div class="layer layer-top"></div>
+                <div class="icing"></div>
+                <div class="drip drip1"></div>
+                <div class="drip drip2"></div>
+                <div class="drip drip3"></div>
+                <div class="candle">
+                    <div class="flame"></div>
+                </div>
+            </div>
+            <div class="loading-text">Loading delicious treats...</div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">DAYANGSARI ENT</a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="product.html">Products</a></li>
+                <li><a href="about.html">About Us</a></li>
+                <li><a href="signin.html">Sign In</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Product Detail Section -->
+    <div class="product-wrapper">
+    <section class="product-detail-section">
+        <div class="product-detail-container">
+            <!-- Product Image -->
+            <div class="detail-image-wrapper">
+                <div class="detail-product-image" id="productImage">
+                </div>
+            </div>
+
+            <!-- Product Information -->
+            <div class="detail-product-info">
+                <div class="detail-breadcrumb">
+                    <a href="index.html">Home</a> / <a href="product.html">Products</a> / <span id="productName">Product</span>
+                </div>
+                
+                <h1 id="productTitle">Loading product...</h1>
+                
+                <div class="detail-category" id="productCategory">Please wait...</div>
+                                
+                <div class="detail-description" id="productDescription">
+                    <h3>Product Description</h3>
+                    <p>Loading product details...</p>
+                </div>
+
+                <div class="detail-price" id="productPrice">Loading...</div>
+
+                <div class="detail-features">
+                    <h3>Features</h3>
+                    <ul id="productFeatures">
+                        <li>Loading...</li>
+                    </ul>
+                </div>
+
+                <div class="detail-quantity">
+                    <label for="quantity">Quantity:</label>
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="increaseQuantity()">+</button>
+                    </div>
+                </div>
+
+                <div class="detail-actions">
+                    <button class="btn-wishlist" onclick="toggleWishlist()" id="wishlistBtn">
+                        <img src="asset/heart-outline.png" alt="Add to wishlist" class="heart-outline" onerror="this.parentElement.innerHTML='🤍'">
+                        <img src="asset/heart-filled.png" alt="Remove from wishlist" class="heart-filled" style="display: none;" onerror="this.style.display='none'">
+                    </button>
+                    <button class="btn btn-primary btn-large" onclick="addToCartFromDetail()">
+                        Add to Cart
+                    </button>
+                    <button class="btn btn-secondary btn-large" onclick="window.location.href='product.html'">
+                        Back to Products
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    </div>
+
+    <div class="scroll-top" id="scrollTop" onclick="scrollToTop()">↑</div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 DAYANGSARI ENT All rights reserved.</p>
+        <p>Created by: TMT3693 WEB APPLICATION DEVELOPMENT G8</p>
+    </footer>
+
+     <!-- ========================================
+     CHATBOT COMPONENT
+     Include this in all your pages using:
+     <div id="chatbot-container"></div>
+     Then load with JavaScript
+     ======================================== -->
+
+     <!-- Chatbot Button -->
+    <button class="chatbot-button" id="chatbotButton" onclick="toggleChatbot()">
+        <span class="chatbot-button-icon">
+            <img src="asset/chatbot.png" alt="Chat" onerror="this.style.display='none'; this.parentElement.innerHTML='💬'">
+        </span>
+        <span class="chatbot-badge" id="chatbotBadge" style="display: none;">1</span>
+    </button>
+
+    <!-- Chatbot Window -->
+    <div class="chatbot-window" id="chatbotWindow">
+        <!-- Header -->
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar">
+                    <img src="asset/cookies.png" alt="Cookie Bot" onerror="this.style.display='none'; this.parentElement.innerHTML='🥮'">
+                </div>
+                <div class="chatbot-title">
+                    <h3>DAYANGSARI Assistant</h3>
+                    <div class="chatbot-status">Online • Ready to help</div>
+                </div>
+            </div>
+            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+
+        <!-- Messages Area -->
+        <div class="chatbot-messages" id="chatbotMessages">
+            <!-- Messages will be added here dynamically -->
+        </div>
+
+        <!-- Input Area -->
+        <div class="chatbot-input-area">
+            <input 
+                type="text" 
+                class="chatbot-input" 
+                id="chatbotInput" 
+                placeholder="Type your message..."
+                onkeypress="handleChatbotKeypress(event)"
+            >
+            <button class="chatbot-send-btn" onclick="sendChatbotMessage()">
+                ➤
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase App (核心，必须先加载)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+
+        // Import Firestore 需要用到的函数（根据你的需求添加）
+        import { 
+            getFirestore, 
+            collection, 
+            getDocs, 
+            addDoc, 
+            query, 
+            where, 
+            orderBy, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        // 你的 Firebase 配置（这个是公开的，没问题）
+        const firebaseConfig = {
+            apiKey: "AIzaSyCuBoMGAH4ojkL7XrRPqTbcxCk-3Hmo42c",
+            authDomain: "dayangsari-7fe0d.firebaseapp.com",
+            projectId: "dayangsari-7fe0d",
+            storageBucket: "dayangsari-7fe0d.firebasestorage.app",
+            messagingSenderId: "525763987372",
+            appId: "1:525763987372:web:52128c2f9c8c16f98c9c09"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+
+        // 初始化 Firestore
+        const db = getFirestore(app);
+
+        // 把 db 和集合引用暴露给你的 script.js 使用（很重要！）
+        window.db = db;
+        window.productsCollection = collection(db, "products");   // 产品集合
+        window.ordersCollection = collection(db, "orders");       // 订单集合
+
+        console.log("Firebase 初始化成功！可以开始使用 Firestore 了");
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
